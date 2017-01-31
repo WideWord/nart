@@ -8,7 +8,7 @@
 
 namespace nart {
     
-    Window::Window(Config cfg) {
+    Window::Window(const Config& cfg) {
         glfwInit();
         
 #ifdef NART_PLATFORM_OSX
@@ -25,7 +25,6 @@ namespace nart {
             std::cout << "Failed to init GLEW: " << glewGetErrorString(err) << '\n';
         }
         
-        renderer = std::make_shared<Renderer>();
         userInput = std::make_shared<UserInput>(window);
     }
     
@@ -42,5 +41,17 @@ namespace nart {
     bool Window::isShouldClose() {
         return glfwWindowShouldClose(window);
     }
+    
+    Ref<Renderer> Window::getRenderer() {
+        if (renderer == nullptr) {
+            renderer = std::make_shared<Renderer>(shared_from_this());
+        }
+        return renderer;
+    }
+    
+    void Window::getWindowSize(int& width, int& height) {
+        glfwGetWindowSize(window, &width, &height);
+    }
+
     
 }

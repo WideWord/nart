@@ -9,7 +9,7 @@ namespace nart {
     class Renderer;
     class UserInput;
     
-    class Window {
+    class Window : public std::enable_shared_from_this<Window> {
     private:
         GLFWwindow* window;
         Ref<Renderer> renderer;
@@ -23,12 +23,17 @@ namespace nart {
                 height = 600;
             }
         };
-        Window(Config cfg = Config());
+        Window(const Config& cfg);
+        
+        static Ref<Window> create(const Config& cfg = Config()) { return std::make_shared<Window>(cfg); }
+        
         ~Window();
         void update();
         bool isShouldClose();
-        Ref<Renderer> getRenderer() { return renderer; }
+        Ref<Renderer> getRenderer();
         Ref<UserInput> getUserInput() { return userInput; }
+        
+        void getWindowSize(int& width, int& height);
     };
     
 }

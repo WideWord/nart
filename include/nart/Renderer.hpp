@@ -9,11 +9,17 @@
 namespace nart {
     
     class RenderPass;
+    class Window;
     
     class Renderer {
     private:
         std::vector<Ref<RenderPass>> renderPasses;
+        WRef<Window> window;
     public:
+        Renderer(const Ref<Window>& window) {
+            this->window = window;
+        }
+        
         std::string getDescription();
         void renderPass(const Ref<RenderPass>& pass);
         void renderFrame();

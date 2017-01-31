@@ -13,6 +13,7 @@ namespace nart {
     
     class VertexArray;
     class Renderer;
+    class Texture2D;
     
     struct DrawCallOptions {
         DrawCallOptions() {}
@@ -29,7 +30,8 @@ namespace nart {
                     Vector4 = 5,
                     Matrix2 = 6,
                     Matrix3 = 7,
-                    Matrix4 = 8
+                    Matrix4 = 8,
+                    Texture2D = 20,
                 };
             };
            
@@ -39,6 +41,7 @@ namespace nart {
                 float floatData[16];
             };
             RawData rawData;
+            Ref<Texture2D> texture2d;
         };
     private:
         std::vector<Item> items;
@@ -115,6 +118,14 @@ namespace nart {
             return *this;
         }
 #endif
+        DrawConstantsBlock& item(ShaderProgram::UniformBinding binding, const Ref<Texture2D> texture) {
+            items.emplace_back();
+            Item& item = items.back();
+            item.binding = binding;
+            item.type = Item::Type::Texture2D;
+            item.texture2d = texture;
+            return *this;
+        }
     };
     
     class RenderPass {
@@ -127,10 +138,22 @@ namespace nart {
         };
     private:
         std::vector<DrawCall> drawCalls;
+        bool needsClearColor;
+        bool needsClearDepth;
+        float clearColor[4];
     protected:
         friend class Renderer;
         const std::vector<DrawCall>& getDrawCalls() const { return drawCalls; }
     public:
+        RenderPass() {
+            needsClearColor = true;
+            needsClearDepth = true;
+            clearColor[0] = 0;
+            clearColor[1] = 0;
+            clearColor[2] = 0;
+            clearColor[3] = 1;
+        }
+        
         void clear();
         void draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram, const DrawConstantsBlock& constants, const DrawCallOptions& options);
         
@@ -144,6 +167,33 @@ namespace nart {
         
         void draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram, const DrawCallOptions& options) {
             draw(vertexBuffer, shaderProgram, nart::DrawConstantsBlock(), options);
+        }
+        
+        void setNeedsClearColor(bool needs) {
+            needsClearColor = needs;
+        }
+        
+        bool isNeedsClearColor() const {
+            return needsClearColor;
+        }
+        
+        void setNeedsClearDepth(bool needs) {
+            needsClearDepth = needs;
+        }
+        
+        bool isNeedsClearDepth() const {
+            return needsClearDepth;
+        }
+        
+        void setClearColor(float red, float green, float blue, float alpha) {
+            clearColor[0] = red;
+            clearColor[1] = green;
+            clearColor[2] = blue;
+            clearColor[3] = alpha;
+        }
+        
+        const float* getClearColor() const {
+            return clearColor;
         }
     };
     

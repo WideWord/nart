@@ -1,5 +1,7 @@
 #include <nart/Renderer.hpp>
 #include <nart/RenderPass.hpp>
+#include <nart/Texture2D.hpp>
+#include <nart/Window.hpp>
 #include "OpenGL.hpp"
 
 namespace nart {
@@ -14,16 +16,37 @@ namespace nart {
     
     
     void Renderer::renderFrame() {
+        
+        int windowWidth, windowHeight;
+        
+        Ref<Window> swindow = window.lock();
+        
+        swindow->getWindowSize(windowWidth, windowHeight);
+        
         for (auto& pass : renderPasses) {
             
-            glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
-            glViewport(0, 0, 800, 600);
-            glDisable(GL_CULL_FACE);
+            glViewport(0, 0, windowWidth, windowHeight);
             
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            if (pass->isNeedsClearColor()) {
+                const float* clearColor = pass->getClearColor();
+                glClearColor(clearColor[0], clearColor[1], clearColor[2], clearColor[3]);
+            }
+            GLenum clearFlags = 0;
+            if (pass->isNeedsClearColor()) {
+                clearFlags |= GL_COLOR_BUFFER_BIT;
+            }
+            if (pass->isNeedsClearDepth()) {
+                clearFlags |= GL_DEPTH_BUFFER_BIT;
+            }
+            if (clearFlags != 0) {
+                glClear(clearFlags);
+            }
             
             for (auto& dc : pass->getDrawCalls()) {
                 glUseProgram(dc.shaderProgram->getID());
+                
+                int activeTexture = 0;
+                GLenum activeTextureID = GL_TEXTURE0;
                 
                 for (auto& constant : dc.constants.getItems()) {
                     switch (constant.type) {
@@ -41,6 +64,13 @@ namespace nart {
                             glUniformMatrix3fv(constant.binding, 1, GL_FALSE, constant.rawData.floatData);
                         case DrawConstantsBlock::Item::Type::Matrix4:
                             glUniformMatrix4fv(constant.binding, 1, GL_FALSE, constant.rawData.floatData);
+                        case DrawConstantsBlock::Item::Type::Texture2D:
+                            glActiveTexture(activeTextureID);
+                            glBindTexture(GL_TEXTURE_2D, constant.texture2d->getID());
+                            glEnable(GL_TEXTURE_2D);
+                            glUniform1i(constant.binding, activeTexture);
+                            activeTexture += 1;
+                            activeTextureID += 1;
                     }
                 }
                 
