@@ -2,14 +2,18 @@
 
 struct GLFWwindow;
 
+#include <nart/Typedef.hpp>
+
 namespace nart {
     
     class Renderer;
+    class UserInput;
     
     class Window {
     private:
         GLFWwindow* window;
-        Renderer* renderer;
+        Ref<Renderer> renderer;
+        Ref<UserInput> userInput;
     public:
         struct Config {
             int width;
@@ -23,7 +27,8 @@ namespace nart {
         ~Window();
         void update();
         bool isShouldClose();
-        Renderer& getRenderer();
+        Ref<Renderer> getRenderer() { return renderer; }
+        Ref<UserInput> getUserInput() { return userInput; }
     };
     
 }

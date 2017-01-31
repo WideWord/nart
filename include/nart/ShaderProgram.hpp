@@ -34,11 +34,14 @@ namespace nart {
     private:
         uint32_t id;
     public:
-        ShaderProgram(const Shader& vertexShader, const Shader& fragmentShader);
+        ShaderProgram(const Ref<Shader>& vertexShader, const Ref<Shader>& fragmentShader);
         ~ShaderProgram();
         inline uint32_t getID() {
             return id;
         }
+        
+        using UniformBinding = int32_t;
+        UniformBinding getUniformBinding(const char* name);
     };
     
 }

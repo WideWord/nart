@@ -1,21 +1,22 @@
-#include <nart/VertexBuffer.hpp>
+#include <nart/VertexArray.hpp>
 #include "OpenGL.hpp"
 
 namespace nart {
 
-    VertexBuffer::VertexBuffer(const Description& desc) {
+    VertexArray::VertexArray(const Description& desc) {
         description = desc;
         glGenBuffers(1, &id);
         glGenBuffers(1, &indiciesID);
         glGenVertexArrays(1, &vao);
     }
     
-    VertexBuffer::~VertexBuffer() {
+    VertexArray::~VertexArray() {
         glDeleteVertexArrays(1, &vao);
         glDeleteBuffers(1, &id);
     }
     
-    void VertexBuffer::uploadData(void* data, size_t size, uint32_t* indicies, size_t indiciesSize) {
+    void VertexArray::uploadData(void* data, size_t size, uint32_t* indicies, size_t indiciesSize) {
+        indiciesCount = indiciesSize;
         glBindVertexArray(vao);
         
         glBindBuffer(GL_ARRAY_BUFFER, id);

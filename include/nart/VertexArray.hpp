@@ -22,7 +22,7 @@ namespace nart {
     
     
     
-    class VertexBuffer {
+    class VertexArray {
     public:
         struct Description {
             VertexFormat vertexFormat;
@@ -32,13 +32,17 @@ namespace nart {
         uint32_t id;
         uint32_t indiciesID;
         uint32_t vao;
+        
+        uint32_t indiciesCount;
+        
         Description description;
     public:
-        VertexBuffer(const Description& description);
-        ~VertexBuffer();
+        VertexArray(const Description& description);
+        ~VertexArray();
         void uploadData(void* data, size_t size, uint32_t* indicies, size_t indiciesSize);
         
         inline uint32_t getVAO() const { return vao; }
+        inline uint32_t getIndiciesCount() const { return indiciesCount; }
     };
     
 }

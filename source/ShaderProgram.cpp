@@ -38,10 +38,10 @@ namespace nart {
         glDeleteShader(id);
     }
  
-    ShaderProgram::ShaderProgram(const Shader& vertexShader, const Shader& fragmentShader) {
+    ShaderProgram::ShaderProgram(const Ref<Shader>& vertexShader, const Ref<Shader>& fragmentShader) {
         id = glCreateProgram();
-        glAttachShader(id, vertexShader.getID());
-        glAttachShader(id, fragmentShader.getID());
+        glAttachShader(id, vertexShader->getID());
+        glAttachShader(id, fragmentShader->getID());
         glLinkProgram(id);
         
         GLint isLinked = 0;
@@ -71,6 +71,10 @@ namespace nart {
             throw Exception(MakeString() << (char*)&(*infoLog.begin()));
         }
         
+    }
+    
+    ShaderProgram::UniformBinding ShaderProgram::getUniformBinding(const char* name) {
+        return glGetUniformLocation(id, name);
     }
     
     ShaderProgram::~ShaderProgram() {

@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <nart/Renderer.hpp>
+#include <nart/UserInput.hpp>
 
 namespace nart {
     
@@ -24,7 +25,8 @@ namespace nart {
             std::cout << "Failed to init GLEW: " << glewGetErrorString(err) << '\n';
         }
         
-        renderer = new Renderer();
+        renderer = std::make_shared<Renderer>();
+        userInput = std::make_shared<UserInput>(window);
     }
     
     Window::~Window() {
@@ -39,10 +41,6 @@ namespace nart {
     
     bool Window::isShouldClose() {
         return glfwWindowShouldClose(window);
-    }
-    
-    Renderer& Window::getRenderer() {
-        return *renderer;
     }
     
 }
