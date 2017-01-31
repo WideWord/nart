@@ -6,6 +6,7 @@ namespace nart {
     VertexBuffer::VertexBuffer(const Description& desc) {
         description = desc;
         glGenBuffers(1, &id);
+        glGenBuffers(1, &indiciesID);
         glGenVertexArrays(1, &vao);
     }
     
@@ -14,13 +15,28 @@ namespace nart {
         glDeleteBuffers(1, &id);
     }
     
-    void VertexBuffer::uploadData(void* data, size_t size) {
-        glBindBuffer(GL_VERTEX_ARRAY, id);
-        glBufferData(GL_VERTEX_ARRAY, size, data, description.isImmutable ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
-        
+    void VertexBuffer::uploadData(void* data, size_t size, uint32_t* indicies, size_t indiciesSize) {
         glBindVertexArray(vao);
         
-        int stride = 0;
+        glBindBuffer(GL_ARRAY_BUFFER, id);
+        glBufferData(GL_ARRAY_BUFFER, size, data, description.isImmutable ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
+        
+        
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indiciesID);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indiciesSize, indicies, description.isImmutable ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
+        
+        
+        size_t offset = 0;
+        
+        size_t stride;
+        
+        for (int i = 0; i < description.vertexFormat.componentsCount; ++i) {
+            size_t typeSize;
+            switch (description.vertexFormat.components[0].type) {
+                case VertexFormat::Component::Type::Float: typeSize = sizeof(float); break;
+            }
+            stride += typeSize * description.vertexFormat.components[i].dimensions;
+        }
         
         for (int i = 0; i < description.vertexFormat.componentsCount; ++i) {
             GLenum type;
@@ -31,12 +47,12 @@ namespace nart {
                 typeSize = sizeof(float);
                 break;
             }
-            glVertexAttribPointer(i, description.vertexFormat.components[i].dimensions, type, GL_FALSE, stride, 0);
-            stride += typeSize * description.vertexFormat.components[i].dimensions;
+            glEnableVertexAttribArray(i);
+            glVertexAttribPointer(i, description.vertexFormat.components[i].dimensions, type, GL_FALSE, stride, (void*)offset);
+            offset += typeSize * description.vertexFormat.components[i].dimensions;
         }
         
         glBindVertexArray(0);
-        glBindBuffer(GL_VERTEX_ARRAY, 0);
     }
     
 }

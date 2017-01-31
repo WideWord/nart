@@ -30,12 +30,13 @@ namespace nart {
         };
     private:
         uint32_t id;
+        uint32_t indiciesID;
         uint32_t vao;
         Description description;
     public:
         VertexBuffer(const Description& description);
         ~VertexBuffer();
-        void uploadData(void* data, size_t size);
+        void uploadData(void* data, size_t size, uint32_t* indicies, size_t indiciesSize);
         
         inline uint32_t getVAO() const { return vao; }
     };

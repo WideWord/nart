@@ -1,6 +1,9 @@
 #include <nart/ShaderProgram.hpp>
 #include <vector>
+#include <nart/Exception.hpp>
+#include <nart/Typedef.hpp>
 #include "OpenGL.hpp"
+
 
 namespace nart {
     
@@ -26,6 +29,8 @@ namespace nart {
             
             std::vector<GLchar> errorLog(maxLength);
             glGetShaderInfoLog(id, maxLength, &maxLength, &errorLog[0]);
+            
+            throw Exception(MakeString() << (char*)&(*errorLog.begin()));
         }
     }
     
@@ -48,6 +53,22 @@ namespace nart {
             
             std::vector<GLchar> infoLog(maxLength);
             glGetProgramInfoLog(id, maxLength, &maxLength, &infoLog[0]);
+            
+            throw Exception(MakeString() << (char*)&(*infoLog.begin()));
+        }
+        
+        glUseProgram(id);
+        glValidateProgram(id);
+        GLint isValid = 0;
+        glGetProgramiv(id, GL_VALIDATE_STATUS, (int *)&isValid);
+        if (isValid == GL_TRUE) {
+            GLint maxLength = 0;
+            glGetProgramiv(id, GL_INFO_LOG_LENGTH, &maxLength);
+            
+            std::vector<GLchar> infoLog(maxLength);
+            glGetProgramInfoLog(id, maxLength, &maxLength, &infoLog[0]);
+            
+            throw Exception(MakeString() << (char*)&(*infoLog.begin()));
         }
         
     }
