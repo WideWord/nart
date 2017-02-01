@@ -4,6 +4,7 @@
 #include <nart/ShaderProgram.hpp>
 #include <nart/VertexArray.hpp>
 #include <nart/RenderPass.hpp>
+#include <nart/Texture2D.hpp>
 #include <vector>
 
 namespace nart {
@@ -38,6 +39,10 @@ namespace nart {
         
         inline Ref<RenderPass> createRenderPass() {
             return std::make_shared<RenderPass>();
+        }
+        
+        inline Ref<Texture2D> createTexture2D(const Texture2D::Description& desc) {
+            return std::make_shared<Texture2D>(desc);
         }
     };
     

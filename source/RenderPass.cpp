@@ -6,7 +6,7 @@ namespace nart {
         drawCalls.clear();
     }
     
-    void RenderPass::draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram, const DrawConstantsBlock& constants, const DrawCallOptions &options) {
+    void RenderPass::draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram, const DrawConstants& constants, const DrawCallOptions &options) {
         DrawCall dc;
         dc.vertexBuffer = vertexBuffer;
         dc.shaderProgram = shaderProgram;

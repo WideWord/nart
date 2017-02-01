@@ -26,6 +26,8 @@ namespace nart {
         }
         
         userInput = std::make_shared<UserInput>(window);
+        lastFrameTime = glfwGetTime();
+        deltaTime = 0;
     }
     
     Window::~Window() {
@@ -36,6 +38,9 @@ namespace nart {
     void Window::update() {
         glfwPollEvents();
         glfwSwapBuffers(window);
+        auto newTime = glfwGetTime();
+        deltaTime = (float)(newTime - lastFrameTime);
+        lastFrameTime = newTime;
     }
     
     bool Window::isShouldClose() {
@@ -52,6 +57,5 @@ namespace nart {
     void Window::getWindowSize(int& width, int& height) {
         glfwGetWindowSize(window, &width, &height);
     }
-
     
 }

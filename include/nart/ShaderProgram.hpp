@@ -41,7 +41,9 @@ namespace nart {
         }
         
         using UniformBinding = int32_t;
+        using VertexComponentBinding = int32_t;
         UniformBinding getUniformBinding(const char* name);
+        VertexComponentBinding getVertexComponentBinding(const char* name);
     };
     
 }

@@ -14,6 +14,8 @@ namespace nart {
         GLFWwindow* window;
         Ref<Renderer> renderer;
         Ref<UserInput> userInput;
+        double lastFrameTime;
+        float deltaTime;
     public:
         struct Config {
             int width;
@@ -34,6 +36,7 @@ namespace nart {
         Ref<UserInput> getUserInput() { return userInput; }
         
         void getWindowSize(int& width, int& height);
+        float getTimeDelta() { return deltaTime; }
     };
     
 }

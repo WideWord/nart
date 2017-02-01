@@ -15,8 +15,8 @@ namespace nart {
         glDeleteBuffers(1, &id);
     }
     
-    void VertexArray::uploadData(void* data, size_t size, uint32_t* indicies, size_t indiciesSize) {
-        indiciesCount = indiciesSize;
+    void VertexArray::uploadData(void* data, size_t size, void* indicies, size_t indiciesSize) {
+        indiciesCount = indiciesSize / description.indexSize;
         glBindVertexArray(vao);
         
         glBindBuffer(GL_ARRAY_BUFFER, id);
@@ -29,17 +29,19 @@ namespace nart {
         
         size_t offset = 0;
         
-        size_t stride;
+        size_t stride = 0;
         
         for (int i = 0; i < description.vertexFormat.componentsCount; ++i) {
             size_t typeSize;
-            switch (description.vertexFormat.components[0].type) {
+            switch (description.vertexFormat.components[i].type) {
                 case VertexFormat::Component::Type::Float: typeSize = sizeof(float); break;
+                case VertexFormat::Component::Type::UnsignedByte: typeSize = sizeof(unsigned char); break;
             }
             stride += typeSize * description.vertexFormat.components[i].dimensions;
         }
         
         for (int i = 0; i < description.vertexFormat.componentsCount; ++i) {
+            auto& component = description.vertexFormat.components[i];
             GLenum type;
             size_t typeSize;
             switch (description.vertexFormat.components[i].type) {
@@ -47,10 +49,13 @@ namespace nart {
                 type = GL_FLOAT;
                 typeSize = sizeof(float);
                 break;
+            case VertexFormat::Component::Type::UnsignedByte:
+                type = GL_UNSIGNED_BYTE;
+                typeSize = sizeof(unsigned char);
             }
             glEnableVertexAttribArray(i);
-            glVertexAttribPointer(i, description.vertexFormat.components[i].dimensions, type, GL_FALSE, stride, (void*)offset);
-            offset += typeSize * description.vertexFormat.components[i].dimensions;
+            glVertexAttribPointer(i, component.dimensions, type, component.normalize ? GL_TRUE : GL_FALSE, stride, (void*)offset);
+            offset += typeSize * component.dimensions;
         }
         
         glBindVertexArray(0);

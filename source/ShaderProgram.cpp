@@ -77,6 +77,10 @@ namespace nart {
         return glGetUniformLocation(id, name);
     }
     
+    ShaderProgram::VertexComponentBinding ShaderProgram::getVertexComponentBinding(const char* name) {
+        return glGetAttribLocation(id, name);
+    }
+    
     ShaderProgram::~ShaderProgram() {
         glDeleteProgram(id);
     }
