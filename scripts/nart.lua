@@ -29,5 +29,7 @@ project "nart"
 		links { "OpenGL.framework" }
 		libdirs { "/usr/local/lib" }
 		includedirs { "/usr/local/include" }
+
+		linkoptions { "-rpath ." }
 	end
 

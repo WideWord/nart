@@ -11,7 +11,7 @@ namespace nart {
     class VertexArray;
     class Renderer;
     
-    struct DrawCallOptions {
+    struct Brush {
         
         bool blendingEnabled = false;
         
@@ -41,10 +41,7 @@ namespace nart {
         int scissorWidth = 0;
         int scissorHeight = 0;
         
-        uint32_t primitivesRangeStart = 0;
-        uint32_t primitivesRangeEnd = 0;
-        
-        DrawCallOptions() {}
+        Brush() {}
     };
         
     class RenderPass {
@@ -53,7 +50,9 @@ namespace nart {
             Ref<VertexArray> vertexBuffer;
             Ref<ShaderProgram> shaderProgram;
             DrawConstants constants;
-            DrawCallOptions options;
+            Brush brush;
+            uint32_t primitivesRangeStart = 0;
+            uint32_t primitivesRangeEnd = 0;
         };
         struct Options {
             bool needsClearColor = true;
@@ -76,18 +75,18 @@ namespace nart {
     public:
         
         void clear();
-        void draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram, const DrawConstants& constants, const DrawCallOptions& options);
+        void draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram, const DrawConstants& constants, const Brush& brush, int primitivesRangeStart = 0, int primitivesRangeEnd = 0);
         
         void draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram) {
-            draw(vertexBuffer, shaderProgram, nart::DrawConstants(), nart::DrawCallOptions());
+            draw(vertexBuffer, shaderProgram, nart::DrawConstants(), nart::Brush());
         }
         
         void draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram, const DrawConstants& constants) {
-            draw(vertexBuffer, shaderProgram, constants, nart::DrawCallOptions());
+            draw(vertexBuffer, shaderProgram, constants, nart::Brush());
         }
         
-        void draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram, const DrawCallOptions& options) {
-            draw(vertexBuffer, shaderProgram, nart::DrawConstants(), options);
+        void draw(const Ref<VertexArray>& vertexBuffer, const Ref<ShaderProgram>& shaderProgram, const Brush& brush) {
+            draw(vertexBuffer, shaderProgram, nart::DrawConstants(), brush);
         }
         
         const Options& getOptions() const { return options; }

@@ -1,20 +1,20 @@
 #include <nart/Renderer.hpp>
 #include <nart/RenderPass.hpp>
 #include <nart/Texture2D.hpp>
-#include <nart/Window.hpp>
+#include <nart/System.hpp>
 #include "OpenGL.hpp"
 
 namespace nart {
     
-    GLenum getGLBlendingFactor(DrawCallOptions::BlengingFactor::Enum factor) {
+    GLenum getGLBlendingFactor(Brush::BlengingFactor::Enum factor) {
         switch (factor) {
-            case DrawCallOptions::BlengingFactor::Zero: return GL_ZERO;
-            case DrawCallOptions::BlengingFactor::One: return GL_ONE;
-            case DrawCallOptions::BlengingFactor::SrcAlpha: return GL_SRC_ALPHA;
-            case DrawCallOptions::BlengingFactor::OneMinusSrcAlpha: return GL_ONE_MINUS_SRC_ALPHA;
-            case DrawCallOptions::BlengingFactor::DstAlpha: return GL_DST_ALPHA;
-            case DrawCallOptions::BlengingFactor::OneMinusDstAlpha: return GL_ONE_MINUS_DST_ALPHA;
-            case DrawCallOptions::BlengingFactor::ConstantColor : return GL_CONSTANT_COLOR;
+            case Brush::BlengingFactor::Zero: return GL_ZERO;
+            case Brush::BlengingFactor::One: return GL_ONE;
+            case Brush::BlengingFactor::SrcAlpha: return GL_SRC_ALPHA;
+            case Brush::BlengingFactor::OneMinusSrcAlpha: return GL_ONE_MINUS_SRC_ALPHA;
+            case Brush::BlengingFactor::DstAlpha: return GL_DST_ALPHA;
+            case Brush::BlengingFactor::OneMinusDstAlpha: return GL_ONE_MINUS_DST_ALPHA;
+            case Brush::BlengingFactor::ConstantColor : return GL_CONSTANT_COLOR;
         }
     }
   
@@ -31,7 +31,7 @@ namespace nart {
         
         int windowWidth, windowHeight;
         
-        Ref<Window> swindow = window.lock();
+        Ref<System> swindow = system.lock();
         
         swindow->getWindowSize(windowWidth, windowHeight);
         
@@ -89,37 +89,37 @@ namespace nart {
                     }
                 }
                                 
-                if (dc.options.blendingEnabled) {
+                if (dc.brush.blendingEnabled) {
                     glEnable(GL_BLEND);
-                    glBlendFunc(getGLBlendingFactor(dc.options.sourceBlendingFactor), getGLBlendingFactor(dc.options.destinationBlendingFactor));
+                    glBlendFunc(getGLBlendingFactor(dc.brush.sourceBlendingFactor), getGLBlendingFactor(dc.brush.destinationBlendingFactor));
                     glBlendEquation(GL_FUNC_ADD);
                 } else {
                     glDisable(GL_BLEND);
                 }
                 
-                switch (dc.options.faceCulling) {
-                    case DrawCallOptions::FaceCulling::NoCulling:
+                switch (dc.brush.faceCulling) {
+                    case Brush::FaceCulling::NoCulling:
                         glDisable(GL_CULL_FACE);
                         break;
-                    case DrawCallOptions::FaceCulling::CullBack:
+                    case Brush::FaceCulling::CullBack:
                         glEnable(GL_CULL_FACE);
                         glCullFace(GL_BACK);
                         break;
-                    case DrawCallOptions::FaceCulling::CullFront:
+                    case Brush::FaceCulling::CullFront:
                         glEnable(GL_CULL_FACE);
                         glCullFace(GL_FRONT);
                         break;
                 }
                 
-                if (dc.options.depthTestEnabled) {
+                if (dc.brush.depthTestEnabled) {
                     glEnable(GL_DEPTH_TEST);
                 } else {
                     glDisable(GL_DEPTH_TEST);
                 }
                 
-                if (dc.options.scissorTestEnabled) {
+                if (dc.brush.scissorTestEnabled) {
                     glEnable(GL_SCISSOR_TEST);
-                    glScissor(dc.options.scissorX, dc.options.scissorY, dc.options.scissorWidth, dc.options.scissorHeight);
+                    glScissor(dc.brush.scissorX, dc.brush.scissorY, dc.brush.scissorWidth, dc.brush.scissorHeight);
                 } else {
                     glDisable(GL_SCISSOR_TEST);
                 }
@@ -139,14 +139,13 @@ namespace nart {
                 }
                 
                 uint32_t indiciesCount;
-                if (dc.options.primitivesRangeEnd == 0) {
-                    indiciesCount = dc.vertexBuffer->getIndiciesCount() - dc.options.primitivesRangeStart;
+                if (dc.primitivesRangeEnd == 0) {
+                    indiciesCount = dc.vertexBuffer->getIndiciesCount() - dc.primitivesRangeStart;
                 } else {
-                    indiciesCount = dc.options.primitivesRangeEnd - dc.options.primitivesRangeStart;
+                    indiciesCount = dc.primitivesRangeEnd - dc.primitivesRangeStart;
                 }
                 
-                auto err = glGetError();
-                glDrawElements(GL_TRIANGLES, indiciesCount, indexSize, (void*)(dc.options.primitivesRangeStart * dc.vertexBuffer->getDescription().indexSize));
+                glDrawElements(GL_TRIANGLES, indiciesCount, indexSize, (void*)(dc.primitivesRangeStart * dc.vertexBuffer->getDescription().indexSize));
             }
             
             pass->clear();

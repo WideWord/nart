@@ -1,4 +1,4 @@
-#include <nart/Window.hpp>
+#include <nart/System.hpp>
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -8,7 +8,7 @@
 
 namespace nart {
     
-    Window::Window(const Config& cfg) {
+    System::System(const Config& cfg) {
         glfwInit();
         
 #ifdef NART_PLATFORM_OSX
@@ -30,12 +30,13 @@ namespace nart {
         deltaTime = 0;
     }
     
-    Window::~Window() {
+    System::~System() {
         glfwDestroyWindow(window);
         glfwTerminate();
     }
     
-    void Window::update() {
+    void System::update() {
+        userInput->newFrame();
         glfwPollEvents();
         glfwSwapBuffers(window);
         auto newTime = glfwGetTime();
@@ -43,19 +44,31 @@ namespace nart {
         lastFrameTime = newTime;
     }
     
-    bool Window::isShouldClose() {
+    bool System::isShouldClose() {
         return glfwWindowShouldClose(window);
     }
     
-    Ref<Renderer> Window::getRenderer() {
+    Ref<Renderer> System::getRenderer() {
         if (renderer == nullptr) {
             renderer = std::make_shared<Renderer>(shared_from_this());
         }
         return renderer;
     }
     
-    void Window::getWindowSize(int& width, int& height) {
+    void System::getWindowSize(int& width, int& height) {
         glfwGetWindowSize(window, &width, &height);
+    }
+    
+    void System::setClipboard(const std::string& str) {
+        glfwSetClipboardString(window, str.c_str());
+    }
+    
+    std::string System::getClipboard() {
+        return std::string(glfwGetClipboardString(window));
+    }
+    
+    const char* System::getClipboardCStr() {
+        return glfwGetClipboardString(window);
     }
     
 }

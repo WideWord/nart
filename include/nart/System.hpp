@@ -9,7 +9,7 @@ namespace nart {
     class Renderer;
     class UserInput;
     
-    class Window : public std::enable_shared_from_this<Window> {
+    class System : public std::enable_shared_from_this<System> {
     private:
         GLFWwindow* window;
         Ref<Renderer> renderer;
@@ -25,11 +25,11 @@ namespace nart {
                 height = 600;
             }
         };
-        Window(const Config& cfg);
+        System(const Config& cfg);
         
-        static Ref<Window> create(const Config& cfg = Config()) { return std::make_shared<Window>(cfg); }
+        static Ref<System> create(const Config& cfg = Config()) { return std::make_shared<System>(cfg); }
         
-        ~Window();
+        ~System();
         void update();
         bool isShouldClose();
         Ref<Renderer> getRenderer();
@@ -37,6 +37,9 @@ namespace nart {
         
         void getWindowSize(int& width, int& height);
         float getTimeDelta() { return deltaTime; }
+        void setClipboard(const std::string& str);
+        std::string getClipboard();
+        const char* getClipboardCStr();
     };
     
 }
