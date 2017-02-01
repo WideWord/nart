@@ -33,3 +33,6 @@ project "nart"
 		linkoptions { "-rpath ." }
 	end
 
+	configuration "windows"
+		links { "OpenGL" }
+
