@@ -2,7 +2,7 @@
 
 struct GLFWwindow;
 
-#include <nart/Typedef.hpp>
+#include "Typedef.hpp"
 
 namespace nart {
     

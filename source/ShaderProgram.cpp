@@ -1,7 +1,7 @@
-#include <nart/ShaderProgram.hpp>
+#include "ShaderProgram.hpp"
 #include <vector>
-#include <nart/Exception.hpp>
-#include <nart/Typedef.hpp>
+#include "Exception.hpp"
+#include "Typedef.hpp"
 #include "OpenGL.hpp"
 
 

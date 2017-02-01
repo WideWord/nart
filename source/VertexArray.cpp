@@ -1,4 +1,4 @@
-#include <nart/VertexArray.hpp>
+#include "VertexArray.hpp"
 #include "OpenGL.hpp"
 
 namespace nart {

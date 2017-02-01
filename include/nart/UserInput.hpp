@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <nart/Typedef.hpp>
+#include "Typedef.hpp"
 
 struct GLFWwindow;
 

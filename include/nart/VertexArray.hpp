@@ -1,7 +1,7 @@
 #pragma once
 
-#include <nart/Typedef.hpp>
-#include <nart/VertexFormat.hpp>
+#include "Typedef.hpp"
+#include "VertexFormat.hpp"
 
 
 namespace nart {

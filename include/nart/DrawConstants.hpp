@@ -1,6 +1,7 @@
 #pragma once
 
-#include <nart/Typedef.hpp>
+#include "Typedef.hpp"
+#include <vector>
 
 #ifdef NART_GLM_EXTENSIONS
 #include <glm/glm.hpp>

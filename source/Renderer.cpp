@@ -1,7 +1,7 @@
-#include <nart/Renderer.hpp>
-#include <nart/RenderPass.hpp>
-#include <nart/Texture2D.hpp>
-#include <nart/System.hpp>
+#include "Renderer.hpp"
+#include "RenderPass.hpp"
+#include "Texture2D.hpp"
+#include "System.hpp"
 #include "OpenGL.hpp"
 
 namespace nart {

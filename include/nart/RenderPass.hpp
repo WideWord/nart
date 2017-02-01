@@ -1,9 +1,9 @@
 #pragma once
 
 #include <vector>
-#include <nart/Typedef.hpp>
-#include <nart/ShaderProgram.hpp>
-#include <nart/DrawConstants.hpp>
+#include "Typedef.hpp"
+#include "ShaderProgram.hpp"
+#include "DrawConstants.hpp"
 #include <memory>
 
 namespace nart {

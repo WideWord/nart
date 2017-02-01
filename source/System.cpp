@@ -1,10 +1,10 @@
-#include <nart/System.hpp>
+#include "System.hpp"
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include <nart/Renderer.hpp>
-#include <nart/UserInput.hpp>
+#include "Renderer.hpp"
+#include "UserInput.hpp"
 
 namespace nart {
     

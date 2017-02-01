@@ -1,10 +1,10 @@
 #pragma once
 
-#include <nart/Typedef.hpp>
-#include <nart/ShaderProgram.hpp>
-#include <nart/VertexArray.hpp>
-#include <nart/RenderPass.hpp>
-#include <nart/Texture2D.hpp>
+#include "Typedef.hpp"
+#include "ShaderProgram.hpp"
+#include "VertexArray.hpp"
+#include "RenderPass.hpp"
+#include "Texture2D.hpp"
 #include <vector>
 
 namespace nart {

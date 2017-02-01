@@ -1,4 +1,4 @@
-#include <nart/Texture2D.hpp>
+#include "Texture2D.hpp"
 #include "OpenGL.hpp"
 
 namespace nart {

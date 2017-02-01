@@ -1,4 +1,4 @@
-#include <nart/UserInput.hpp>
+#include "UserInput.hpp"
 #include "OpenGL.hpp"
 
 namespace nart {
