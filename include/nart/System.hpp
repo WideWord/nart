@@ -16,6 +16,7 @@ namespace nart {
         Ref<UserInput> userInput;
         double lastFrameTime;
         float deltaTime;
+        int framerateLimit;
     public:
         struct Config {
             int width;
@@ -40,6 +41,9 @@ namespace nart {
         void setClipboard(const std::string& str);
         std::string getClipboard();
         const char* getClipboardCStr();
+        
+        int getFramerateLimit() { return framerateLimit; }
+        void setFramerateLimit(int limit) { framerateLimit = limit; }
     };
     
 }

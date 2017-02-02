@@ -28,6 +28,7 @@ namespace nart {
         userInput = std::make_shared<UserInput>(window);
         lastFrameTime = glfwGetTime();
         deltaTime = 0;
+        
     }
     
     System::~System() {
@@ -39,8 +40,20 @@ namespace nart {
         userInput->newFrame();
         glfwPollEvents();
         glfwSwapBuffers(window);
-        auto newTime = glfwGetTime();
+        
+        
+        double newTime = glfwGetTime();
         deltaTime = (float)(newTime - lastFrameTime);
+
+        if (framerateLimit > 0) {
+            double deltaTarget = 1.0 / (double)framerateLimit;
+            while (deltaTime < deltaTarget) {
+                glfwPollEvents();
+                double newTime = glfwGetTime();
+                deltaTime = (float)(newTime - lastFrameTime);
+            }
+        }
+        
         lastFrameTime = newTime;
     }
     

@@ -12,7 +12,7 @@ namespace nart {
         dc.shaderProgram = shaderProgram;
         dc.constants = constants;
         dc.brush = brush;
-        dc.primitivesRangeEnd = primitivesRangeStart;
+        dc.primitivesRangeStart = primitivesRangeStart;
         dc.primitivesRangeEnd = primitivesRangeEnd;
         drawCalls.push_back(dc);
     }
